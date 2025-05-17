@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database import get_db
-from models import Bus, Route, Ticket
+from models.bus import Bus
+from models.route import Route
+from models.ticket import Ticket
 from schemas.bus import BusCreate, BusResponse, BusWithAvailableSeats
 from utils.auth import get_current_client
 

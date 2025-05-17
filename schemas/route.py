@@ -21,6 +21,7 @@ class RouteResponse(RouteBase):
     
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class RouteWithAvailableSeats(RouteResponse):

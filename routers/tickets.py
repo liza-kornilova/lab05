@@ -6,7 +6,9 @@ import threading
 import uuid
 
 from database import get_db
-from models import Ticket, Route, SeatReservation, Bus
+from models.ticket import Ticket, SeatReservation
+from models.route import Route
+from models.bus import Bus
 from schemas.ticket import (
     TicketCreate, 
     TicketResponse, 
@@ -20,6 +22,17 @@ router = APIRouter(prefix="/tickets", tags=["tickets"])
 
 # Семафор для безпечного доступу до блокування місць
 seat_lock = threading.Lock()
+
+
+def cancel_reservation(reservation_id: int, db: Session):
+    """Скасування блокування місця."""
+    reservation = db.query(SeatReservation).filter(
+        SeatReservation.id == reservation_id
+    ).first()
+    
+    if reservation:
+        reservation.is_active = False
+        db.commit()
 
 
 @router.post("/reserve-seat", response_model=SeatReservationResponse)
@@ -102,17 +115,6 @@ def reserve_seat(
         db.refresh(new_reservation)
         
         return new_reservation
-
-
-def cancel_reservation(reservation_id: int, db: Session):
-    """Скасування блокування місця."""
-    reservation = db.query(SeatReservation).filter(
-        SeatReservation.id == reservation_id
-    ).first()
-    
-    if reservation:
-        reservation.is_active = False
-        db.commit()
 
 
 @router.post("/buy", response_model=TicketsBulkResponse)

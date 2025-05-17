@@ -1,6 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import sys
+import os
 
+# Додавання поточної директорії до шляху пошуку Python
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
+
+# Імпорт локальних модулів
 from database import engine, Base
 from routers import auth, buses, routes, tickets
 
@@ -38,3 +45,8 @@ def read_root():
         "docs": "/docs",
         "redoc": "/redoc"
     }
+
+# Запуск сервера якщо цей файл запускається напряму
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

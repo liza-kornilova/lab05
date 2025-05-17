@@ -1,10 +1,10 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
 class ClientBase(BaseModel):
     username: str
-    email: EmailStr
+    email: str = Field(..., pattern=r"^[\w\.-]+@[\w\.-]+\.\w+$")  # Простий патерн для валідації email
     full_name: Optional[str] = None
     phone_number: Optional[str] = None
 
@@ -19,6 +19,7 @@ class ClientResponse(ClientBase):
     
     class Config:
         orm_mode = True
+        from_attributes = True
         
 
 class ClientLogin(BaseModel):

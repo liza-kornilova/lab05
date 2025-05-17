@@ -25,6 +25,7 @@ class TicketResponse(TicketBase):
     
     class Config:
         orm_mode = True
+        from_attributes = True
 
 
 class TicketsBulkResponse(BaseModel):
@@ -50,3 +51,4 @@ class SeatReservationResponse(BaseModel):
     
     class Config:
         orm_mode = True
+        from_attributes = True
